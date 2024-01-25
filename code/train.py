@@ -5,6 +5,9 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from dataset import CustomDataset
+from model import SimpleModel
+
 
 def main() -> None:
     # Hyperparameters
@@ -12,37 +15,38 @@ def main() -> None:
     lr = 0.001
     batch_size = 1
     epochs = 100
-    num_workers = 8
+    num_workers = 4
 
     # Model details
-    # model = SRCNN().to(device)
-    criterion = nn.L1Loss()
-    # optimizer = optim.Adam(model.parameters(), lr=lr)
+    model = SimpleModel().to(device)
+    criterion = nn.BCELoss() # maybe some other loss for comparing percentages
+    optimizer = optim.Adam(model.parameters(), lr=lr)
 
     # Loading and preparing data
-    # transform = transforms.ToTensor()
+    images_folder = '../data/images/test'
+    csv_file = '../data/labels.csv'
+    transform = transforms.Compose([transforms.ToTensor()])
 
-    # train_dataset = CustomDataset(root='dataset/train', transform=transform, pattern="x2")
-    # train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    train_dataset = CustomDataset(images_folder, csv_file, transform)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
     # Training Loop
-    # for epoch in tqdm(range(epochs), desc='Training', dynamic_ncols=True):
-    #     total_loss = 0.0
-    #     for lr_image, hr_image in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', dynamic_ncols=True):
-    #         input, target = lr_image.to(device), hr_image.to(device)
-    #         optimizer.zero_grad()
-    #         output = model(input)
-    #         loss = criterion(output, target)
-    #         loss.backward()
-    #         optimizer.step()
-    #
-    #         total_loss += loss.item()
-    #
-    #     average_loss = total_loss / len(train_loader)
-    #     print(f"Epoch [{epoch + 1}/{epochs}], Loss: {average_loss:.4f}")
-    #
-    # # Save trained model
-    # torch.save(model.state_dict(), 'pretrained_models/subpnn_model.pth')
+    for epoch in tqdm(range(epochs), desc='Training', dynamic_ncols=True):
+        total_loss = 0.0
+        for image, target in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', dynamic_ncols=True):
+            optimizer.zero_grad()
+            output = model(image)
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+
+            total_loss += loss.item()
+
+        average_loss = total_loss / len(train_loader)
+        print(f"Epoch [{epoch + 1}/{epochs}], Loss: {average_loss:.4f}")
+
+    # Save trained model
+    torch.save(model.state_dict(), 'pretrained_models/simple_model.pth')
 
 
 if __name__ == '__main__':
