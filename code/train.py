@@ -23,9 +23,12 @@ def main() -> None:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     # Loading and preparing data
-    images_folder = '../data/images/test'
-    csv_file = '../data/labels.csv'
-    transform = transforms.Compose([transforms.ToTensor()])
+    images_folder = 'data/images/train'
+    csv_file = 'data/labels.csv'
+    transform = transforms.Compose([
+        transforms.Resize((1024, 1024)),
+        transforms.ToTensor()
+    ])
 
     train_dataset = CustomDataset(images_folder, csv_file, transform)
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
@@ -34,6 +37,7 @@ def main() -> None:
     for epoch in tqdm(range(epochs), desc='Training', dynamic_ncols=True):
         total_loss = 0.0
         for image, target in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', dynamic_ncols=True):
+            image, target = image.to(device), target.to(device)
             optimizer.zero_grad()
             output = model(image)
             loss = criterion(output, target)
@@ -46,7 +50,7 @@ def main() -> None:
         print(f"Epoch [{epoch + 1}/{epochs}], Loss: {average_loss:.4f}")
 
     # Save trained model
-    torch.save(model.state_dict(), 'pretrained_models/simple_model.pth')
+    torch.save(model.state_dict(), 'trained_models/simple_model.pth')
 
 
 if __name__ == '__main__':

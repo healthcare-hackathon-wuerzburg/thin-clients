@@ -24,7 +24,11 @@ class CustomDataset(Dataset):
         self.df = pd.read_csv(csv_file_path)
 
         # Get the list of image names
-        self.image_names = self.df['ID'].tolist()
+        all_files = os.listdir(images_folder_path)
+        image_names = [file for file in all_files if file.endswith(".jpg")]
+        # Remove the ".jpg" extension
+        image_names = [name[:-4] for name in image_names]
+        self.image_names = image_names
 
         # Initialize a list of tuples containing images as tensors and vectors
         self.data = self.initialize_data()
@@ -64,34 +68,39 @@ class CustomDataset(Dataset):
         """
         return len(self.data)
 
-    def __getitem__(self, item):
+    def __getitem__(self, index):
         """
         Returns the item (image, vector) at the specified index.
 
         Parameters:
-            item (int): Index to retrieve the item.
+            index (int): Index to retrieve the item.
 
         Returns:
             tuple: A tuple containing the image (as a tensor) and the corresponding vector.
         """
-        return self.data[item]
+        return self.data[index]
 
 
-# Example usage:
-# Specify the paths and any desired transformations
-images_folder = '../data/images/test'
-csv_file = '../data/labels.csv'
-transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
+def main() -> None:
+    # Example usage:
+    # Specify the paths and any desired transformations
+    images_folder = 'data/images/train'
+    csv_file = 'data/labels.csv'
+    transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
 
-# Create an instance of CustomDataset
-custom_dataset = CustomDataset(images_folder, csv_file, transform)
+    # Create an instance of CustomDataset
+    custom_dataset = CustomDataset(images_folder, csv_file, transform)
 
-train_loader = DataLoader(dataset=custom_dataset, batch_size=1, shuffle=True, num_workers=4)
+    train_loader = DataLoader(dataset=custom_dataset, batch_size=1, shuffle=True, num_workers=4)
 
-# Accessing individual samples
-sample_image, sample_vector = custom_dataset[0]
-print("Sample Image:", sample_image)
-print("Sample Vector:", sample_vector)
+    # Accessing individual samples
+    sample_image, sample_vector = custom_dataset[0]
+    print("Sample Image:", sample_image)
+    print("Sample Vector:", sample_vector)
 
-for tensor, vector in train_loader:
-    print(f"Tensor {tensor} and Vector {vector}.")
+    for tensor, vector in train_loader:
+        print(f"Tensor {tensor} and Vector {vector}.")
+
+
+if __name__ == '__main__':
+    main()
