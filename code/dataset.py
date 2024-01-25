@@ -2,7 +2,7 @@ import os
 from PIL import Image
 import pandas as pd
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 
@@ -86,7 +86,12 @@ transform = transforms.Compose([transforms.ToTensor()])  # Example transformatio
 # Create an instance of CustomDataset
 custom_dataset = CustomDataset(images_folder, csv_file, transform)
 
+train_loader = DataLoader(dataset=custom_dataset, batch_size=1, shuffle=True, num_workers=4)
+
 # Accessing individual samples
 sample_image, sample_vector = custom_dataset[0]
 print("Sample Image:", sample_image)
 print("Sample Vector:", sample_vector)
+
+for tensor, vector in train_loader:
+    print(f"Tensor {tensor} and Vector {vector}.")
