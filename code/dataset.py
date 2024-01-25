@@ -77,21 +77,26 @@ class CustomDataset(Dataset):
         return self.data[item]
 
 
-# Example usage:
-# Specify the paths and any desired transformations
-images_folder = '../data/images/test'
-csv_file = '../data/labels.csv'
-transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
+def main() -> None:
+    # Example usage:
+    # Specify the paths and any desired transformations
+    images_folder = '../data/images/train'
+    csv_file = '../data/images/train/labels.csv'
+    transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
 
-# Create an instance of CustomDataset
-custom_dataset = CustomDataset(images_folder, csv_file, transform)
+    # Create an instance of CustomDataset
+    custom_dataset = CustomDataset(images_folder, csv_file, transform)
 
-train_loader = DataLoader(dataset=custom_dataset, batch_size=1, shuffle=True, num_workers=4)
+    train_loader = DataLoader(dataset=custom_dataset, batch_size=1, shuffle=True, num_workers=4)
 
-# Accessing individual samples
-sample_image, sample_vector = custom_dataset[0]
-print("Sample Image:", sample_image)
-print("Sample Vector:", sample_vector)
+    # Accessing individual samples
+    sample_image, sample_vector = custom_dataset[0]
+    print("Sample Image:", sample_image)
+    print("Sample Vector:", sample_vector)
 
-for tensor, vector in train_loader:
-    print(f"Tensor {tensor} and Vector {vector}.")
+    for tensor, vector in train_loader:
+        print(f"Tensor {tensor} and Vector {vector}.")
+
+
+if __name__ == '__main__':
+    main()

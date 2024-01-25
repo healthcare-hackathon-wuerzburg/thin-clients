@@ -15,7 +15,7 @@ def main() -> None:
     lr = 0.001
     batch_size = 1
     epochs = 100
-    num_workers = 4
+    num_workers = 1
 
     # Model details
     model = SimpleModel().to(device)
@@ -23,9 +23,12 @@ def main() -> None:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     # Loading and preparing data
-    images_folder = '../data/images/test'
-    csv_file = '../data/labels.csv'
-    transform = transforms.Compose([transforms.ToTensor()])
+    images_folder = '../data/images/train'
+    csv_file = '../data/images/train/labels.csv'
+    transform = transforms.Compose([
+        transforms.Resize((64, 64)),
+        transforms.ToTensor()
+    ])
 
     train_dataset = CustomDataset(images_folder, csv_file, transform)
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
@@ -46,7 +49,7 @@ def main() -> None:
         print(f"Epoch [{epoch + 1}/{epochs}], Loss: {average_loss:.4f}")
 
     # Save trained model
-    torch.save(model.state_dict(), 'pretrained_models/simple_model.pth')
+    torch.save(model.state_dict(), 'trained_models/simple_model.pth')
 
 
 if __name__ == '__main__':
