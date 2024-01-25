@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+
 class CustomDataset(Dataset):
     def __init__(self, images_folder_path, csv_file_path, transform=None):
         """
@@ -23,7 +24,36 @@ class CustomDataset(Dataset):
         self.df = pd.read_csv(csv_file_path)
 
         # Get the list of image names
-        self.image_names = self.df['image_name'].tolist()
+        self.image_names = self.df['ID'].tolist()
+
+        # Initialize a list of tuples containing images as tensors and vectors
+        self.data = self.initialize_data()
+
+    def initialize_data(self):
+        """
+        Initialize a list of tuples containing images as tensors and vectors.
+
+        Returns:
+            list: List of tuples containing (image as tensor, vector).
+        """
+        data = []
+
+        for image_name in self.image_names:
+            # Construct the path to the image
+            image_path = os.path.join(self.images_folder_path, image_name + ".jpg")
+
+            # Load the image using PIL
+            image = Image.open(image_path)
+
+            # Apply transformations if specified
+            if self.transform:
+                image = self.transform(image)
+
+            # Get the vector corresponding to the image from the DataFrame
+            vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.float32)
+            data.append((image, vector))
+
+        return data
 
     def __len__(self):
         """
@@ -32,7 +62,7 @@ class CustomDataset(Dataset):
         Returns:
             int: Number of samples in the dataset.
         """
-        return len(self.image_names)
+        return len(self.data)
 
     def __getitem__(self, item):
         """
@@ -44,32 +74,17 @@ class CustomDataset(Dataset):
         Returns:
             tuple: A tuple containing the image (as a tensor) and the corresponding vector.
         """
-        # Get the image name at the specified index
-        image_name = self.image_names[item]
+        return self.data[item]
 
-        # Construct the path to the image
-        image_path = os.path.join(self.images_folder_path, image_name)
-
-        # Load the image using PIL
-        image = Image.open(image_path)
-
-        # Apply transformations if specified
-        if self.transform:
-            image = self.transform(image)
-
-        # Get the vector corresponding to the image from the DataFrame
-        vector = torch.tensor(self.df.loc[self.df['image_name'] == image_name].drop('image_name', axis=1).values[0], dtype=torch.float32)
-
-        return image, vector
 
 # Example usage:
 # Specify the paths and any desired transformations
-images_folder_path = '/path/to/images/folder'
-csv_file_path = '/path/to/csv/file.csv'
+images_folder = '../data/images/test'
+csv_file = '../data/labels.csv'
 transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
 
 # Create an instance of CustomDataset
-custom_dataset = CustomDataset(images_folder_path, csv_file_path, transform)
+custom_dataset = CustomDataset(images_folder, csv_file, transform)
 
 # Accessing individual samples
 sample_image, sample_vector = custom_dataset[0]
