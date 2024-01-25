@@ -46,7 +46,7 @@ def main() -> None:
         print(f"Epoch [{epoch + 1}/{epochs}], Loss: {average_loss:.4f}")
 
     # Save trained model
-    torch.save(model.state_dict(), 'pretrained_models/subpnn_model.pth')
+    torch.save(model.state_dict(), 'pretrained_models/simple_model.pth')
 
 
 if __name__ == '__main__':
