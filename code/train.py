@@ -15,7 +15,7 @@ def main() -> None:
     lr = 0.001
     batch_size = 1
     epochs = 100
-    num_workers = 1
+    num_workers = 4
 
     # Model details
     model = SimpleModel().to(device)
@@ -24,7 +24,7 @@ def main() -> None:
 
     # Loading and preparing data
     images_folder = '../data/images/train'
-    csv_file = '../data/images/train/labels.csv'
+    csv_file = '../data/labels.csv'
     transform = transforms.Compose([
         transforms.Resize((64, 64)),
         transforms.ToTensor()
