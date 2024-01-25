@@ -54,7 +54,7 @@ class CustomDataset(Dataset):
                 image = self.transform(image)
 
             # Get the vector corresponding to the image from the DataFrame
-            vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.float32)
+            vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.int32)
             data.append((image, vector))
 
         return data

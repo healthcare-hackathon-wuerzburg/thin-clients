@@ -8,8 +8,10 @@ from tqdm import tqdm
 from dataset import CustomDataset
 from model import SimpleModel
 
+
 def round_with_threshold(tensor, threshold):
     return (tensor >= threshold).int()
+
 
 def main() -> None:
     # Loading and preparing data
@@ -30,16 +32,13 @@ def main() -> None:
     model.load_state_dict(torch.load(model_path))
     model.eval()
 
-    threshold = 0.5
+    threshold = 0.45
     for image, target in tqdm(evaluate_loader, dynamic_ncols=True, desc="Evaluate"):
         image, target = image.to(device), target.to(device)
         with torch.no_grad():
             output = model(image)
         print(target)
-        print(round_with_threshold(output, threshold))
-        break
-        # calc performance instead of loss
-        # loss = criterion(output, target)
+        print(f"Target: {target}, Output: {round_with_threshold(output, threshold)}")
 
 # average_loss = total_loss / len(train_loader)
 
