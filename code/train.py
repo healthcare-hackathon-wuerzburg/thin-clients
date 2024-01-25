@@ -26,7 +26,7 @@ def main() -> None:
     images_folder = 'data/images/train'
     csv_file = 'data/labels.csv'
     transform = transforms.Compose([
-        transforms.Resize((1024, 1024)),
+        transforms.Resize((64, 64)),
         transforms.ToTensor()
     ])
 
