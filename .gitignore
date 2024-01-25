@@ -143,3 +143,4 @@ cython_debug/
 .DS_Store
 
 rename_images.sh
+*.lock
