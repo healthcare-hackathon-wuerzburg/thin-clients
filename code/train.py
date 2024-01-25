@@ -23,8 +23,8 @@ def main() -> None:
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     # Loading and preparing data
-    images_folder = '../data/images/train'
-    csv_file = '../data/labels.csv'
+    images_folder = 'data/images/train'
+    csv_file = 'data/labels.csv'
     transform = transforms.Compose([
         transforms.Resize((64, 64)),
         transforms.ToTensor()

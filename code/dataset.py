@@ -84,8 +84,8 @@ class CustomDataset(Dataset):
 def main() -> None:
     # Example usage:
     # Specify the paths and any desired transformations
-    images_folder = '../data/images/train'
-    csv_file = '../data/labels.csv'
+    images_folder = 'data/images/train'
+    csv_file = 'data/labels.csv'
     transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
 
     # Create an instance of CustomDataset
