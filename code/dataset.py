@@ -1,17 +1,77 @@
+import os
+from PIL import Image
+import pandas as pd
+import torch
 from torch.utils.data import Dataset
-
+from torchvision import transforms
 
 class CustomDataset(Dataset):
-    def __init__(self):
-        # we need path for the folder of the images, as well as the path to the .csv file
-        # we map each image (based on name) to the vector inside the .csv file
-        # image has to be transformed to a tensor
-        pass
+    def __init__(self, images_folder_path, csv_file_path, transform=None):
+        """
+        Initialize the CustomDataset.
+
+        Parameters:
+            images_folder_path (str): Path to the folder containing images.
+            csv_file_path (str): Path to the CSV file containing image-vector mapping.
+            transform (torchvision.transforms.Compose, optional): Transformations to be applied to the image.
+        """
+        self.images_folder_path = images_folder_path
+        self.csv_file_path = csv_file_path
+        self.transform = transform
+
+        # Read CSV file into a pandas DataFrame
+        self.df = pd.read_csv(csv_file_path)
+
+        # Get the list of image names
+        self.image_names = self.df['image_name'].tolist()
 
     def __len__(self):
-        # idea: our Dataset will be a list of tuples of (tensor, vector), list lenght should be fine
-        pass
+        """
+        Returns the number of samples in the dataset.
+
+        Returns:
+            int: Number of samples in the dataset.
+        """
+        return len(self.image_names)
 
     def __getitem__(self, item):
-        # idea: get pair of image(tensor) and vector (for classification)
-        pass
+        """
+        Returns the item (image, vector) at the specified index.
+
+        Parameters:
+            item (int): Index to retrieve the item.
+
+        Returns:
+            tuple: A tuple containing the image (as a tensor) and the corresponding vector.
+        """
+        # Get the image name at the specified index
+        image_name = self.image_names[item]
+
+        # Construct the path to the image
+        image_path = os.path.join(self.images_folder_path, image_name)
+
+        # Load the image using PIL
+        image = Image.open(image_path)
+
+        # Apply transformations if specified
+        if self.transform:
+            image = self.transform(image)
+
+        # Get the vector corresponding to the image from the DataFrame
+        vector = torch.tensor(self.df.loc[self.df['image_name'] == image_name].drop('image_name', axis=1).values[0], dtype=torch.float32)
+
+        return image, vector
+
+# Example usage:
+# Specify the paths and any desired transformations
+images_folder_path = '/path/to/images/folder'
+csv_file_path = '/path/to/csv/file.csv'
+transform = transforms.Compose([transforms.ToTensor()])  # Example transformation (convert image to tensor)
+
+# Create an instance of CustomDataset
+custom_dataset = CustomDataset(images_folder_path, csv_file_path, transform)
+
+# Accessing individual samples
+sample_image, sample_vector = custom_dataset[0]
+print("Sample Image:", sample_image)
+print("Sample Vector:", sample_vector)
