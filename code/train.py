@@ -37,6 +37,7 @@ def main() -> None:
     for epoch in tqdm(range(epochs), desc='Training', dynamic_ncols=True):
         total_loss = 0.0
         for image, target in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', dynamic_ncols=True):
+            image, target = image.to(device), target.to(device)
             optimizer.zero_grad()
             output = model(image)
             loss = criterion(output, target)
