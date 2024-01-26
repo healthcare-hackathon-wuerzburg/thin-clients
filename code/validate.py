@@ -19,7 +19,7 @@ def round_with_threshold(tensor, threshold):
 
 def main() -> None:
     # Loading and preparing data
-    images_folder = 'data/images/validation'
+    images_folder = 'data/images/validation/detail'
     csv_file = 'data/labels.csv'
     transform = transforms.Compose([
         transforms.Resize((64, 64)),
