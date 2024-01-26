@@ -58,7 +58,8 @@ Describe, how to install the project, like:
 2) install requirements via `pip3 install -r /path/to/requirements.txt`
 3) download the images from [here](https://drive.google.com/file/d/1TJV3IsHQ-39Nf_K26qJRzdB7wvRHfRaG/view?usp=sharing)
 4) unzip the downloaded folder and insert the image folder into the data folder of this repository
-5) run the project and test our or your own microscopic images of capillaries :)
+5) train your network at least once (run train.py)
+6) run the project and test our or your own microscopic images of capillaries :)
 
 ## Project Overview
 
