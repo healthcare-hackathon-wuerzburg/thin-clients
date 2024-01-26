@@ -84,6 +84,12 @@ class CustomDataset(Dataset):
 
 
 def main() -> None:
+    """
+    Main function to demonstrate the usage of CustomDataset.
+
+    Returns:
+        None
+    """
     # Example usage:
     # Specify the paths and any desired transformations
     images_folder = 'data/images/train'

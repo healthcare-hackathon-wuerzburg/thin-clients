@@ -4,12 +4,20 @@ import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
 from dataset import CustomDataset
 from model import SimpleModel
 
 
 def main() -> None:
+    """
+    Main function to train the SimpleModel on a custom dataset.
+
+    Performs the training loop, including loading data, defining the model and hyperparameters,
+    training the model, and saving the trained model.
+
+    Returns:
+        None
+    """
     # Hyperparameters
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     lr = 0.001

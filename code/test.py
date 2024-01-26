@@ -1,12 +1,19 @@
-import numpy
 import torch
-import numpy as np
 from torchvision import transforms
 from PIL import Image
 from model import SimpleModel
 
 
-def test(path_to_image: str) -> [float]:
+def test(path_to_image: str) -> list[float]:
+    """
+    Test the SimpleModel on the given image.
+
+    Parameters:
+        path_to_image (str): Path to the image file for testing.
+
+    Returns:
+        list[float]: List containing the output vector values.
+    """
     # Process input
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -21,12 +28,12 @@ def test(path_to_image: str) -> [float]:
     image = image.to(device)
 
     # Load model
-
     model_path = "trained_models/simple_model.pth"
     model = SimpleModel().to(device)
 
     model.load_state_dict(torch.load(model_path))
     model.eval()
+
     # Forward pass model to generate output
     with torch.no_grad():
         output = model(image.unsqueeze(0))
@@ -38,6 +45,9 @@ def test(path_to_image: str) -> [float]:
 
 
 def main() -> None:
+    """
+    Main function to test the SimpleModel on a sample image and print the results.
+    """
     print(test("./data/images/test/blutung1.jpg"))
 
 
