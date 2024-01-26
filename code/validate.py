@@ -14,10 +14,26 @@ from model import SimpleModel
 
 
 def round_with_threshold(tensor, threshold):
+    """
+    Round the elements of a tensor based on a given threshold.
+
+    Parameters:
+        tensor (torch.Tensor): Input tensor.
+        threshold (float): Threshold for rounding.
+
+    Returns:
+        torch.Tensor: Tensor with elements rounded based on the threshold.
+    """
     return (tensor >= threshold).int()
 
 
 def main() -> None:
+    """
+    Main function to evaluate the SimpleModel on a validation dataset and print performance metrics.
+
+    Returns:
+        None
+    """
     # Loading and preparing data
     images_folder = 'data/images/validation/detail'
     csv_file = 'data/labels.csv'
@@ -36,7 +52,7 @@ def main() -> None:
     model.load_state_dict(torch.load(model_path))
     model.eval()
 
-    # initialize empty result arrays
+    # Initialize empty result arrays
     all_targets = []
     all_outputs = []
 
@@ -45,21 +61,21 @@ def main() -> None:
         with torch.no_grad():
             output = model(image)
 
-        # round output to integer values
+        # Round output to integer values
         output_rounded = round_with_threshold(output, 0.2)
 
-        # convert to numpy to be able to use sklearn performance metrics
+        # Convert to numpy to be able to use sklearn performance metrics
         target_np = target.int().cpu().view(-1).numpy()
         output_rounded_np = output_rounded.cpu().view(-1).numpy()
 
-        # accumulate targets and outputs
+        # Accumulate targets and outputs
         all_targets.append(target_np)
         all_outputs.append(output_rounded_np)
 
-    # define averaging method for precision recall and f1 scores
+    # Define averaging method for precision, recall, and f1 scores
     avg_method = "weighted"
 
-    # calculate sklearn performance metrics
+    # Calculate sklearn performance metrics
     accuracy = accuracy_score(all_targets, all_outputs)
     precision = precision_score(all_targets, all_outputs, average=avg_method)
     recall = recall_score(all_targets, all_outputs, average=avg_method)
