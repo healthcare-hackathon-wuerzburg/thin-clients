@@ -56,7 +56,9 @@ Describe, how to install the project, like:
 
 1) clone the repository via `git clone `
 2) install requirements via `pip3 install -r /path/to/requirements.txt`
-3) run the project and test your own microscopic images of capillaries.
+3) download the images from [here](https://drive.google.com/file/d/1TJV3IsHQ-39Nf_K26qJRzdB7wvRHfRaG/view?usp=sharing)
+4) unzip the downloaded folder and insert the image folder into the data folder of this repository
+5) run the project and test our or your own microscopic images of capillaries :)
 
 ## Project Overview
 
