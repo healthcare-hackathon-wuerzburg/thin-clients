@@ -33,7 +33,7 @@ def main() -> None:
     model.load_state_dict(torch.load(model_path))
     model.eval()
 
-    threshold = 0.45
+    threshold = 0.5
     for image, target in tqdm(evaluate_loader, dynamic_ncols=True, desc="Evaluate"):
         image, target = image.to(device), target.to(device)
         with torch.no_grad():
@@ -47,9 +47,7 @@ def main() -> None:
 
         #round output to integer values
         output_rounded = round_with_threshold(output, threshold)
-
-        #round output of the model to integer values
-
+        print(f"Output rounded: {output_rounded}")
 
         #flattens the tensors for use with sklearn functions
         target_flat = target.view(-1).numpy()
