@@ -51,12 +51,12 @@ def main() -> None:
 
         #flattens the tensors for use with sklearn functions
         target_flat = target.view(-1).numpy()
-        output_flat = output.view(-1).numpy()
+        output_rounded_flat = output_rounded.view(-1).numpy()
         print(f"target_flat: {target_flat}")
-        print(f"output_flat: {output_flat}")
+        print(f"output_flat: {output_rounded_flat}")
 
         #calc accuracy
-        accuracy = accuracy_score(target_flat, output_flat)
+        accuracy = accuracy_score(target_flat, output_rounded_flat)
 
         print(f"Accuracy: {accuracy}")
 
