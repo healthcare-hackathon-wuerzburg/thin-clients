@@ -56,7 +56,7 @@ class CustomDataset(Dataset):
             assert image_name in self.df['ID'].values, f"Image name {image_name} not found in the DataFrame."
 
             # Get the vector corresponding to the image from the DataFrame
-            vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.int32)
+            vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.float32)
             data.append((image, vector))
 
         return data

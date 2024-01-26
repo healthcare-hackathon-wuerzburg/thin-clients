@@ -46,7 +46,7 @@ def main() -> None:
         output_rounded = round_with_threshold(output, 0.5)
 
         #convert to numpy to be able to use sklearn performance metrics
-        target_np = target.cpu().view(-1).numpy()
+        target_np = target.int().cpu().view(-1).numpy()
         output_rounded_np = output_rounded.cpu().view(-1).numpy()
 
         # accumulate targets and outputs
