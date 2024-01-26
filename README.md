@@ -73,3 +73,4 @@ The project is structured into 3 main parts:
 ## Useful links:
 
 - [HealthCare Hackathon Wuerzburg 25-26.01.2024](https://www.healthcare-hackathon.info/hhwuerzburg)
+
