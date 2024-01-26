@@ -5,8 +5,12 @@ import PIL.Image
 import io
 import base64
 
-def convert_to_bytes(file_or_bytes, resize=None):
+from numpy import maximum
 
+from test import test
+
+
+def convert_to_bytes(file_or_bytes, resize=None):
     if isinstance(file_or_bytes, str):
         img = PIL.Image.open(file_or_bytes)
     else:
@@ -41,10 +45,10 @@ images_col = [[sg.Text('You choose from the list:')],
               [sg.Image(key='-IMAGE-')]]
 
 results_col = [[sg.Text("Analysis Results", key="results_text")],
-              [sg.Text("Microhemorrhages:", key="microhemorrhages_text")],
-              [sg.Text("Giant Capillaries:", key="giant_capillaries_text")],
-              [sg.Text("Normal Density:", key="normal_text")],
-              [sg.Text("Bushy Capillaries:", key="bushy_text")]]
+               [sg.Text("Microhemorrhages:", key="microhemorrhages_text")],
+               [sg.Text("Giant Capillaries:", key="giant_capillaries_text")],
+               [sg.Text("Normal Density:", key="normal_text")],
+               [sg.Text("Bushy Capillaries:", key="bushy_text")]]
 
 # ----- Full layout -----
 layout = [
@@ -55,6 +59,7 @@ window = sg.Window('Multiple Format Image Viewer', layout, resizable=True)
 
 # ----- Run the Event Loop -----
 # --------------------------------- Event Loop ---------------------------------
+results = [0, 0, 0, 0]
 while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, 'Exit'):
@@ -73,16 +78,23 @@ while True:
     elif event == '-FILE LIST-':  # A file was chosen from the listbox
         try:
             filename = os.path.join(values['-FOLDER-'], values['-FILE LIST-'][0])
+            results = test(filename)
             window['-TOUT-'].update(filename)
             window['-IMAGE-'].update(data=convert_to_bytes(filename, resize=(768, 768)))
         except Exception as E:
             print(f'** Error {E} **')
             pass  # something weird happened making the full filename
     if event == 'evaluate':
-        results = ["test", "test", "test", "test"]
-        window['microhemorrhages_text'].update(results[0])
-        window['giant_capillaries_text'].update(results[1])
-        window['normal_text'].update(results[2])
-        window['bushy_text'].update(results[3])
+        max_index = results.index(max(results))  # Find the index of the maximum value
+
+        window['microhemorrhages_text'].update("Microhemorrhages: " + "{:.2f}".format(results[0]),
+                                               text_color=('red' if max_index == 0 else 'black'))
+        window['giant_capillaries_text'].update("Giant Capillaries: " + "{:.2f}".format(results[1]),
+                                                text_color=('red' if max_index == 1 else 'black'))
+        window['normal_text'].update("Normal Density:" + "{:.2f}".format(results[2]),
+                                     text_color=('red' if max_index == 2 else 'black'))
+        window['bushy_text'].update("Bushy Capillaries:" + "{:.2f}".format(results[3]),
+                                    text_color=('red' if max_index == 3 else 'black'))
+
 # --------------------------------- Close & Exit ---------------------------------
 window.close()
