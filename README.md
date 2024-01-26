@@ -1,12 +1,39 @@
-# PROJECTNAME
+# Capillary AI based Imaging
 
 ## Problem Statement
 
-Describe the main problem here.
+AI-based analysis of capillary microscopic imaging.
+
+In rheumatology, the diagnos'c process is oZen challenging and integrates different types of
+diagnostics.
+Some rheumatic diseases directly affect the small blood vessels and can be
+diagnosed by non-invasive imaging of these blood vessels in the nail fold.
+
+The examer has to distinguish different types of blood vessel structures as well as the total vessel density.
+Thereby, semi-quantitative analysis of the different capillary malformations is important. These make the
+capillary microscopy a time-consuming diagnostic procedure. An AI-based software could help
+the examer by analysis the capillary density as well as mark relevant pathologic abnormalities
+and perhaps can offer a suspicious diagnosis to the examer.
+
+This project was developed as part of a 2 day effort at Healthcare Hackathon Wuerzburg from Jan 25th-26th 2024.
 
 ## Idea
 
-Describe how you are going to solve this problem
+We have therefore developed an AI based on Python and Pytorch, which can detect abnormalities given a microscopic image of capillaries.
+
+The following abnormalities can be detected at the moment:
+
+- Microhemorrhages,
+- Giant capillaries
+- Bushy capillaries
+
+The AI can also detect capillaries of normal density.
+
+Currently, the AI has an accuracy of X %.
+
+The low accuracy is because of the lack of training data, in total, less than 100 images were available to train the AI.
+
+In the future, as more training data (hopefully) becomes available, the accuracy will increase dramatically.
 
 ## Getting Started
 
@@ -17,47 +44,33 @@ This section describes the requirements of the project and how to get started.
 List all requirements here
 
 - Python
-- x
-- y
+- PyTorch
+- TorchVision
+- tqdm
+- Pillow
+- Pandas
 
 ### Installation
 
 Describe, how to install the project, like:
 
-1) clone the repository via `git clone ...`
-2) install dependencies via `npm install`
-3) start the dev server via `npm run dev`
-4) suddenly a miracle appears
-5) open your webbrowser on http://localhost:3000
+1) clone the repository via `git clone `
+2) install requirements via `pip3 install -r /path/to/requirements.txt`
+3) run the project and test your own microscopic images of capillaries.
 
-## How to use the Project 
-
-Describe, how someone can work with the developed application / library. How can I access basic functionality, ...
-
-## Deployment
-
-Describe, how the project can be deployed (if necessary). How can i spin up a docker container that executes something, how can i move the containers to a server, how can I use the trained ML model, ... (if applicable in your project context).
 
 ## Project Overview
 
-Describe how the project is structured. Describe the architecture and the main components (if necessary) and the interaction between these components.
+Describe how the project is structured.
 
-## How to Contribute
+Describe the architecture and the main components (if necessary) and the interaction between these components.
 
-Describe, how new team members can contribute to the existing repository, like:
-
-1) clone the repository
-2) work on a dedicated branch for your feature `git branch -b feature_name`
-3) create a pull request for the feature and document the changes accordingly
-4) you have to write tests in order to get your PR merged
-5) send changes against `main` branch
-
-## Additional Information
-
-Are there any additional information that are important to understand how this code works?
+The project is structured into 3 main parts:
+- Front End/User Interface, which loads the images into the program and presents results of AI analysis to the users.
+- Back End/AI, the actual net computing whether an AI image shows abnormalities
+- data including training images
 
 ## Useful links:
 
-- [Most common Git commands](https://rogerdudler.github.io/git-guide/index.de.html)
-- [How to create a GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
+- [HealthCare Hackathon Wuerzburg 25-26.01.2024](https://www.healthcare-hackathon.info/hhwuerzburg)
 

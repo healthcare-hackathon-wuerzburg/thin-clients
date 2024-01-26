@@ -50,9 +50,8 @@ results_col = [[sg.Text("Analysis Results", key="results_text")],
 layout = [
     [sg.Column(left_col, element_justification='c'), sg.VSeperator(), sg.Column(images_col, element_justification='c'),
      sg.VSeperator(), sg.Column(results_col, element_justification='c')]]
-
 # --------------------------------- Create Window ---------------------------------
-window = sg.Window('', layout, resizable=True)
+window = sg.Window('Multiple Format Image Viewer', layout, resizable=True)
 
 # ----- Run the Event Loop -----
 # --------------------------------- Event Loop ---------------------------------
@@ -62,12 +61,6 @@ while True:
         break
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
-    if event == 'evaluate':
-        results = ["test", "test", "test", "test"]
-        window['microhemorrhages_text'].update(results[0])
-        window['giant_capillaries_text'].update(results[1])
-        window['normal_text'].update(results[2])
-        window['bushy_text'].update(results[3])
     if event == '-FOLDER-':  # Folder name was filled in, make a list of files in the folder
         folder = values['-FOLDER-']
         try:
@@ -81,13 +74,15 @@ while True:
         try:
             filename = os.path.join(values['-FOLDER-'], values['-FILE LIST-'][0])
             window['-TOUT-'].update(filename)
-            if values['-W-'] and values['-H-']:
-                new_size = int(values['-W-']), int(values['-H-'])
-            else:
-                new_size = None
             window['-IMAGE-'].update(data=convert_to_bytes(filename, resize=(768, 768)))
         except Exception as E:
             print(f'** Error {E} **')
             pass  # something weird happened making the full filename
+    if event == 'evaluate':
+        results = ["test", "test", "test", "test"]
+        window['microhemorrhages_text'].update(results[0])
+        window['giant_capillaries_text'].update(results[1])
+        window['normal_text'].update(results[2])
+        window['bushy_text'].update(results[3])
 # --------------------------------- Close & Exit ---------------------------------
 window.close()
