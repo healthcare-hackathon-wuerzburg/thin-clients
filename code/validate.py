@@ -4,6 +4,7 @@ import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+from sklearn.metrics import accuracy_score
 
 from dataset import CustomDataset
 from model import SimpleModel
@@ -37,8 +38,29 @@ def main() -> None:
         image, target = image.to(device), target.to(device)
         with torch.no_grad():
             output = model(image)
-        print(target)
-        print(f"Target: {target}, Output: {round_with_threshold(output, threshold)}")
+
+        #print target
+        print(f"Target: {target}")
+
+        #print output
+        print(f"Output: {output}")
+
+        #round output to integer values
+        output_rounded = round_with_threshold(output, threshold)
+
+        #round output of the model to integer values
+
+
+        #flattens the tensors for use with sklearn functions
+        target_flat = target.view(-1).numpy()
+        output_flat = output.view(-1).numpy()
+        print(f"target_flat: {target_flat}")
+        print(f"output_flat: {output_flat}")
+
+        #calc accuracy
+        accuracy = accuracy_score(target_flat, output_flat)
+
+        print(f"Accuracy: {accuracy}")
 
 # average_loss = total_loss / len(train_loader)
 

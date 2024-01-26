@@ -17,7 +17,6 @@ class CustomDataset(Dataset):
             transform (torchvision.transforms.Compose, optional): Transformations to be applied to the image.
         """
         self.images_folder_path = images_folder_path
-        self.csv_file_path = csv_file_path
         self.transform = transform
 
         # Read CSV file into a pandas DataFrame
@@ -52,6 +51,9 @@ class CustomDataset(Dataset):
             # Apply transformations if specified
             if self.transform:
                 image = self.transform(image)
+
+            # Check if image_name exists in the DataFrame
+            assert image_name in self.df['ID'].values, f"Image name {image_name} not found in the DataFrame."
 
             # Get the vector corresponding to the image from the DataFrame
             vector = torch.tensor(self.df.loc[self.df['ID'] == image_name].drop('ID', axis=1).values[0], dtype=torch.int32)
