@@ -46,7 +46,7 @@ def main() -> None:
             output = model(image)
 
         # round output to integer values
-        output_rounded = round_with_threshold(output, 0.5)
+        output_rounded = round_with_threshold(output, 0.2)
 
         # convert to numpy to be able to use sklearn performance metrics
         target_np = target.int().cpu().view(-1).numpy()
