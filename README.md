@@ -61,4 +61,3 @@ Are there any additional information that are important to understand how this c
 - [Most common Git commands](https://rogerdudler.github.io/git-guide/index.de.html)
 - [How to create a GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
 
-
