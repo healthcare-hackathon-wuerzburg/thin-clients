@@ -12,6 +12,7 @@ from test import test
 DETECTION_THRESHOLD = 0.2
 FONT_SIZE = 16
 
+
 def convert_to_bytes(file_or_bytes, resize=None):
     if isinstance(file_or_bytes, str):
         img = PIL.Image.open(file_or_bytes)
@@ -39,18 +40,18 @@ def convert_to_bytes(file_or_bytes, resize=None):
 
 left_col = [[sg.Text('Folder'), sg.In(size=(25, 1), enable_events=True, key='-FOLDER-'), sg.FolderBrowse()],
             [sg.Listbox(values=[], enable_events=True, size=(40, 20), key='-FILE LIST-')],
-            [sg.Button('Evaluate Image', key='evaluate',  font=(None, FONT_SIZE))]]
+            [sg.Button('Evaluate Image', key='evaluate', font=(None, FONT_SIZE))]]
 
 # For now will only show the name of the file that was chosen
-images_col = [[sg.Text('You chose from the list:',  font=(None, FONT_SIZE))],
+images_col = [[sg.Text('You chose from the list:', font=(None, FONT_SIZE))],
               [sg.Text(size=(40, 1), key='-TOUT-')],
               [sg.Image(key='-IMAGE-')]]
 
-results_col = [[sg.Text("Analysis Results", key="results_text",  font=(None, FONT_SIZE))],
-               [sg.Text("Microhemorrhages:", key="microhemorrhages_text",  font=(None, FONT_SIZE))],
-               [sg.Text("Giant Capillaries:", key="giant_capillaries_text",  font=(None, FONT_SIZE))],
-               [sg.Text("Normal Density:", key="normal_text",  font=(None, FONT_SIZE))],
-               [sg.Text("Bushy Capillaries:", key="bushy_text",  font=(None, FONT_SIZE))]]
+results_col = [[sg.Text("Analysis Results", key="results_text", font=(None, FONT_SIZE))],
+               [sg.Text("Microhemorrhages:", key="microhemorrhages_text", font=(None, FONT_SIZE))],
+               [sg.Text("Giant Capillaries:", key="giant_capillaries_text", font=(None, FONT_SIZE))],
+               [sg.Text("Normal Density:", key="normal_text", font=(None, FONT_SIZE))],
+               [sg.Text("Bushy Capillaries:", key="bushy_text", font=(None, FONT_SIZE))]]
 
 # ----- Full layout -----
 layout = [
@@ -81,7 +82,7 @@ while True:
         try:
             filename = os.path.join(values['-FOLDER-'], values['-FILE LIST-'][0])
             window['microhemorrhages_text'].update("Microhemorrhages: ",
-                                                  text_color='white', font=(None, FONT_SIZE))
+                                                   text_color='white', font=(None, FONT_SIZE))
             window['giant_capillaries_text'].update("Giant Capillaries: ",
                                                     text_color='white', font=(None, FONT_SIZE))
             window['normal_text'].update("Normal Density: ",

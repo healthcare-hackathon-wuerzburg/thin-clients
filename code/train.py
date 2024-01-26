@@ -19,7 +19,7 @@ def main() -> None:
 
     # Model details
     model = SimpleModel().to(device)
-    criterion = nn.BCELoss() # maybe some other loss for comparing percentages
+    criterion = nn.BCELoss()  # maybe some other loss for comparing percentages
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     # Loading and preparing data

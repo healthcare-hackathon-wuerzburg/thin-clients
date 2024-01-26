@@ -19,7 +19,8 @@ This project was developed as part of a 2 day effort at Healthcare Hackathon Wue
 
 ## Idea
 
-We have therefore developed an AI based on Python and Pytorch, which can detect abnormalities given a microscopic image of capillaries.
+We have therefore developed an AI based on Python and Pytorch, which can detect abnormalities given a microscopic image
+of capillaries.
 
 The following abnormalities can be detected at the moment:
 
@@ -58,7 +59,6 @@ Describe, how to install the project, like:
 2) install requirements via `pip3 install -r /path/to/requirements.txt`
 3) run the project and test your own microscopic images of capillaries.
 
-
 ## Project Overview
 
 Describe how the project is structured.
@@ -66,6 +66,7 @@ Describe how the project is structured.
 Describe the architecture and the main components (if necessary) and the interaction between these components.
 
 The project is structured into 3 main parts:
+
 - Front End/User Interface, which loads the images into the program and presents results of AI analysis to the users.
 - Back End/AI, the actual net computing whether an AI image shows abnormalities
 - data including training images
