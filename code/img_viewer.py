@@ -41,10 +41,10 @@ images_col = [[sg.Text('You choose from the list:')],
               [sg.Image(key='-IMAGE-')]]
 
 results_col = [[sg.Text("Analysis Results", key="results_text")],
-              [sg.Text("Blood: 0", key="new")],
-              [sg.Text("Megakapillaren: 0", key="capillaries_text")],
-              [sg.Text("Normalbefund: 0", key="normal_text")],
-              [sg.Text("Torquierungen: 0", key="torque_text")]]
+              [sg.Text("Microhemorrhages:", key="microhemorrhages_text")],
+              [sg.Text("Giant Capillaries:", key="giant_capillaries_text")],
+              [sg.Text("Normal Density:", key="normal_text")],
+              [sg.Text("Bushy Capillaries:", key="bushy_text")]]
 
 # ----- Full layout -----
 layout = [
@@ -63,9 +63,11 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     if event == 'evaluate':
-        window['results_text'].update("test")
-        window['capillaries_text'].update("test")
-        window['torque_text'].update("test")
+        results = ["test", "test", "test", "test"]
+        window['microhemorrhages_text'].update(results[0])
+        window['giant_capillaries_text'].update(results[1])
+        window['normal_text'].update(results[2])
+        window['bushy_text'].update(results[3])
     if event == '-FOLDER-':  # Folder name was filled in, make a list of files in the folder
         folder = values['-FOLDER-']
         try:
