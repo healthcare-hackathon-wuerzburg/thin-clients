@@ -9,6 +9,8 @@ from numpy import maximum
 
 from test import test
 
+DETECTION_THRESHOLD = 0.2
+FONT_SIZE = 16
 
 def convert_to_bytes(file_or_bytes, resize=None):
     if isinstance(file_or_bytes, str):
@@ -37,18 +39,18 @@ def convert_to_bytes(file_or_bytes, resize=None):
 
 left_col = [[sg.Text('Folder'), sg.In(size=(25, 1), enable_events=True, key='-FOLDER-'), sg.FolderBrowse()],
             [sg.Listbox(values=[], enable_events=True, size=(40, 20), key='-FILE LIST-')],
-            [sg.Button('Evaluate Image', key='evaluate')]]
+            [sg.Button('Evaluate Image', key='evaluate',  font=(None, FONT_SIZE))]]
 
 # For now will only show the name of the file that was chosen
-images_col = [[sg.Text('You choose from the list:')],
+images_col = [[sg.Text('You chose from the list:',  font=(None, FONT_SIZE))],
               [sg.Text(size=(40, 1), key='-TOUT-')],
               [sg.Image(key='-IMAGE-')]]
 
-results_col = [[sg.Text("Analysis Results", key="results_text")],
-               [sg.Text("Microhemorrhages:", key="microhemorrhages_text")],
-               [sg.Text("Giant Capillaries:", key="giant_capillaries_text")],
-               [sg.Text("Normal Density:", key="normal_text")],
-               [sg.Text("Bushy Capillaries:", key="bushy_text")]]
+results_col = [[sg.Text("Analysis Results", key="results_text",  font=(None, FONT_SIZE))],
+               [sg.Text("Microhemorrhages:", key="microhemorrhages_text",  font=(None, FONT_SIZE))],
+               [sg.Text("Giant Capillaries:", key="giant_capillaries_text",  font=(None, FONT_SIZE))],
+               [sg.Text("Normal Density:", key="normal_text",  font=(None, FONT_SIZE))],
+               [sg.Text("Bushy Capillaries:", key="bushy_text",  font=(None, FONT_SIZE))]]
 
 # ----- Full layout -----
 layout = [
@@ -78,6 +80,14 @@ while True:
     elif event == '-FILE LIST-':  # A file was chosen from the listbox
         try:
             filename = os.path.join(values['-FOLDER-'], values['-FILE LIST-'][0])
+            window['microhemorrhages_text'].update("Microhemorrhages: ",
+                                                  text_color='white', font=(None, FONT_SIZE))
+            window['giant_capillaries_text'].update("Giant Capillaries: ",
+                                                    text_color='white', font=(None, FONT_SIZE))
+            window['normal_text'].update("Normal Density: ",
+                                         text_color='white', font=(None, FONT_SIZE))
+            window['bushy_text'].update("Bushy Capillaries: ",
+                                        text_color='white', font=(None, FONT_SIZE))
             results = test(filename)
             window['-TOUT-'].update(filename)
             window['-IMAGE-'].update(data=convert_to_bytes(filename, resize=(768, 768)))
@@ -85,16 +95,20 @@ while True:
             print(f'** Error {E} **')
             pass  # something weird happened making the full filename
     if event == 'evaluate':
-        max_index = results.index(max(results))  # Find the index of the maximum value
+        text_color_microhemorrhages = 'red' if results[0] > DETECTION_THRESHOLD else 'black'
+        text_color_giant_capillaries = 'red' if results[1] > DETECTION_THRESHOLD else 'black'
+        text_color_normal = 'red' if results[2] > DETECTION_THRESHOLD else 'black'
+        text_color_bushy = 'red' if results[3] > DETECTION_THRESHOLD else 'black'
 
+        # Update window elements with the determined text colors
         window['microhemorrhages_text'].update("Microhemorrhages: " + "{:.2f}".format(results[0]),
-                                               text_color=('red' if max_index == 0 else 'black'))
+                                               text_color=text_color_microhemorrhages, font=(None, FONT_SIZE))
         window['giant_capillaries_text'].update("Giant Capillaries: " + "{:.2f}".format(results[1]),
-                                                text_color=('red' if max_index == 1 else 'black'))
+                                                text_color=text_color_giant_capillaries, font=(None, FONT_SIZE))
         window['normal_text'].update("Normal Density:" + "{:.2f}".format(results[2]),
-                                     text_color=('red' if max_index == 2 else 'black'))
+                                     text_color=text_color_normal, font=(None, FONT_SIZE))
         window['bushy_text'].update("Bushy Capillaries:" + "{:.2f}".format(results[3]),
-                                    text_color=('red' if max_index == 3 else 'black'))
+                                    text_color=text_color_bushy, font=(None, FONT_SIZE))
 
 # --------------------------------- Close & Exit ---------------------------------
 window.close()
