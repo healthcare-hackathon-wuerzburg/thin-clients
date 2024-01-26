@@ -1,18 +1,18 @@
+import warnings
+warnings.filterwarnings('ignore')
+
 import torch
 import torch.nn as nn
-import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 from dataset import CustomDataset
 from model import SimpleModel
 
-
 def round_with_threshold(tensor, threshold):
     return (tensor >= threshold).int()
-
 
 def main() -> None:
     # Loading and preparing data
@@ -33,35 +33,40 @@ def main() -> None:
     model.load_state_dict(torch.load(model_path))
     model.eval()
 
-    threshold = 0.5
+    #initialize empty result arrays
+    all_targets = []
+    all_outputs = []
+
     for image, target in tqdm(evaluate_loader, dynamic_ncols=True, desc="Evaluate"):
         image, target = image.to(device), target.to(device)
         with torch.no_grad():
             output = model(image)
 
-        #print target
-        print(f"Target: {target}")
+        # round output to integer values
+        output_rounded = round_with_threshold(output, 0.5)
 
-        #print output
-        print(f"Output: {output}")
+        #convert to numpy to be able to use sklearn performance metrics
+        target_np = target.cpu().view(-1).numpy()
+        output_rounded_np = output_rounded.cpu().view(-1).numpy()
 
-        #round output to integer values
-        output_rounded = round_with_threshold(output, threshold)
-        print(f"Output rounded: {output_rounded}")
+        # accumulate targets and outputs
+        all_targets.append(target_np)
+        all_outputs.append(output_rounded_np)
 
-        #flattens the tensors for use with sklearn functions
-        target_flat = target.view(-1).numpy()
-        output_rounded_flat = output_rounded.view(-1).numpy()
-        print(f"target_flat: {target_flat}")
-        print(f"output_flat: {output_rounded_flat}")
+    #define averaging method for precision recall and f1 scores
+    avg_method = "weighted"
 
-        #calc accuracy
-        accuracy = accuracy_score(target_flat, output_rounded_flat)
+    # calculate sklearn performance metrics
+    accuracy = accuracy_score(all_targets, all_outputs)
+    precision = precision_score(all_targets, all_outputs, average=avg_method)
+    recall = recall_score(all_targets, all_outputs, average=avg_method)
+    f1 = f1_score(all_targets, all_outputs, average=avg_method)
 
-        print(f"Accuracy: {accuracy}")
-
-# average_loss = total_loss / len(train_loader)
-
+    # Print results
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
 
 if __name__ == '__main__':
     main()
